@@ -4,38 +4,118 @@ package newsanalyzer.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import newsanalyzer.ctrl.Controller;
+import newsapi.NewsApi;
+import newsapi.NewsApiBuilder;
+import newsapi.enums.*;
+
+import static newsanalyzer.ctrl.Controller.APIKEY;
 
 public class UserInterface 
 {
-
 	private Controller ctrl = new Controller();
 
 	public void getDataFromCtrl1(){
-		System.out.println("ABC");
+		System.out.println("Choice latest news NFL\"");
 
-		ctrl.process();
+		NewsApi newsApi = new NewsApiBuilder()
+				.setApiKey(APIKEY)
+				.setQ("nfl")
+				.setEndPoint(Endpoint.TOP_HEADLINES)
+				.setSourceCountry(null)
+				.setLanguage(Language.en)
+				.setSourceCategory(null)
+				.setPageSize("100")
+				.createNewsApi();
+
+		ctrl.process(newsApi);
 	}
 
 	public void getDataFromCtrl2(){
+		System.out.println("Choice latest news NBA");
+
+		NewsApi newsApi = new NewsApiBuilder()
+				.setApiKey(APIKEY)
+				.setQ("nba")
+				.setEndPoint(Endpoint.TOP_HEADLINES)
+				.setSourceCountry(null)
+				.setLanguage(Language.en)
+				.setSourceCategory(null)
+				.setPageSize("100")
+				.createNewsApi();
+
+		ctrl.process(newsApi);
 	}
 
 	public void getDataFromCtrl3(){
+		System.out.println("Choice latest news usa");
+
+		NewsApi newsApi = new NewsApiBuilder()
+				.setApiKey(APIKEY)
+				.setQ("usa")
+				.setEndPoint(Endpoint.TOP_HEADLINES)
+				.setSourceCountry(null)
+				.setLanguage(Language.en)
+				.setSourceCategory(null)
+				.setPageSize("100")
+				.createNewsApi();
+
+
+		ctrl.process(newsApi);
 
 	}
 	
 	public void getDataForCustomInput() {
-		
+		System.out.println("Choice User Input");
+
+		String keyword;
+		String endpoint_temp;
+		String endpoint;
+		String language_temp;
+		String language;
+
+		Scanner scanner = new Scanner(System.in);
+		System.out.println();
+		System.out.println("Please set a keyword: ");
+		keyword = scanner.nextLine();
+		/*System.out.println();
+		System.out.println("Please set a Type: a) TOP_HEADLINES b) EVERYTHING");
+		endpoint_temp = scanner.nextLine();
+		if(endpoint_temp.equals("a")){
+			endpoint = "TOP_HEADLINES";
+		} else {
+			endpoint = "EVERYTHING";
+		}
+		System.out.println("Please set a Language: a) german b) english");
+		language_temp = scanner.nextLine();
+		if(language_temp.equals("a")){
+			language = "de";
+		}else{
+			language = "en";
+		}
+		*/
+		NewsApi newsApi = new NewsApiBuilder()
+				.setApiKey(APIKEY)
+				.setQ(keyword)
+				.setEndPoint(Endpoint.TOP_HEADLINES)
+				.setSourceCountry(null)
+				.setLanguage(Language.en)
+				.setSourceCategory(null)
+				.setPageSize("100")
+				.createNewsApi();
+
+		ctrl.process(newsApi);
 	}
 
 
 	public void start() {
-		Menu<Runnable> menu = new Menu<>("User Interfacx");
+		Menu<Runnable> menu = new Menu<>("User Interface");
 		menu.setTitel("Wählen Sie aus:");
-		menu.insert("a", "Choice ABC", this::getDataFromCtrl1);
-		menu.insert("b", "Choice DEF", this::getDataFromCtrl2);
-		menu.insert("c", "Choice 3", this::getDataFromCtrl3);
+		menu.insert("a", "Choice latest corona news", this::getDataFromCtrl1);
+		menu.insert("b", "Choice latest news austria", this::getDataFromCtrl2);
+		menu.insert("c", "Choice latest news usa", this::getDataFromCtrl3);
 		menu.insert("d", "Choice User Imput:",this::getDataForCustomInput);
 		menu.insert("q", "Quit", null);
 		Runnable choice;

@@ -104,15 +104,15 @@ public class NewsApi {
         this.endpoint = endpoint;
     }
 
-    protected String requestData() {
+    protected String requestData() throws NewsApiException{
         String url = buildURL();
         System.out.println("URL: "+url);
         URL obj = null;
         try {
             obj = new URL(url);
         } catch (MalformedURLException e) {
-            // TOOO improve ErrorHandling
             e.printStackTrace();
+            throw new NewsApiException("URL is empty");
         }
         HttpURLConnection con;
         StringBuilder response = new StringBuilder();
@@ -125,16 +125,20 @@ public class NewsApi {
             }
             in.close();
         } catch (IOException e) {
-            // TOOO improve ErrorHandling
             System.out.println("Error "+e.getMessage());
+            throw new NewsApiException("No Connection to the Server could be established");
         }
         return response.toString();
     }
 
-    protected String buildURL() {
-        // TODO ErrorHandling
+    protected String buildURL() throws NewsApiException {
         String urlbase = String.format(NEWS_API_URL,getEndpoint().getValue(),getQ(),getApiKey());
         StringBuilder sb = new StringBuilder(urlbase);
+
+        if(getApiKey().equals("") || getApiKey() == null){
+            throw new NewsApiException("API Key is missing");
+        }
+
 
         if(getFrom() != null){
             sb.append(DELIMITER).append("from=").append(getFrom());
@@ -172,7 +176,7 @@ public class NewsApi {
         return sb.toString();
     }
 
-    public NewsReponse getNews() {
+    public NewsReponse getNews() throws NewsApiException {
         NewsReponse newsReponse = null;
         String jsonResponse = requestData();
         if(jsonResponse != null && !jsonResponse.isEmpty()){
@@ -186,8 +190,9 @@ public class NewsApi {
             } catch (JsonProcessingException e) {
                 System.out.println("Error: "+e.getMessage());
             }
+        } else {
+            throw new NewsApiException("The News Response is empty");
         }
-        //TODO improve Errorhandling
         return newsReponse;
     }
 }

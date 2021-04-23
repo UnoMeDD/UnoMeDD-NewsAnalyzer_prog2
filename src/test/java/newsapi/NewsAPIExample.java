@@ -10,7 +10,7 @@ import java.util.List;
 
 public class NewsAPIExample {
 
-    public static final String APIKEY = "myAPIKey";
+    public static final String APIKEY = "76c866eebc25452d9f2ec2bac97a08e5";
 
     public static void main(String[] args){
 
@@ -22,8 +22,13 @@ public class NewsAPIExample {
                 .setSourceCategory(Category.health)
                 .createNewsApi();
 
-            NewsReponse newsResponse = newsApi.getNews();
-            if(newsResponse != null){
+        NewsReponse newsResponse = null;
+        try {
+            newsResponse = newsApi.getNews();
+        } catch (NewsApiException e) {
+            e.printStackTrace();
+        }
+        if(newsResponse != null){
                 List<Article> articles = newsResponse.getArticles();
                 articles.stream().forEach(article -> System.out.println(article.toString()));
             }
@@ -36,7 +41,11 @@ public class NewsAPIExample {
                 .setExcludeDomains("Lifehacker.com")
                 .createNewsApi();
 
+        try {
             newsResponse = newsApi.getNews();
+        } catch (NewsApiException e) {
+            e.printStackTrace();
+        }
         if(newsResponse != null){
             List<Article> articles = newsResponse.getArticles();
             articles.stream().forEach(article -> System.out.println(article.toString()));
