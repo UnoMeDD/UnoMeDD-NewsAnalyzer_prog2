@@ -113,8 +113,8 @@ public class UserInterface
 	public void start() {
 		Menu<Runnable> menu = new Menu<>("User Interface");
 		menu.setTitel("Wählen Sie aus:");
-		menu.insert("a", "Choice latest corona news", this::getDataFromCtrl1);
-		menu.insert("b", "Choice latest news austria", this::getDataFromCtrl2);
+		menu.insert("a", "Choice latest NFL news", this::getDataFromCtrl1);
+		menu.insert("b", "Choice latest NBA news", this::getDataFromCtrl2);
 		menu.insert("c", "Choice latest news usa", this::getDataFromCtrl3);
 		menu.insert("d", "Choice User Imput:",this::getDataForCustomInput);
 		menu.insert("q", "Quit", null);
