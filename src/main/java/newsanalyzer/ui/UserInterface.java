@@ -4,18 +4,25 @@ package newsanalyzer.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Scanner;
 
 import newsanalyzer.ctrl.Controller;
 import newsapi.NewsApi;
 import newsapi.NewsApiBuilder;
 import newsapi.enums.*;
+import newsreader.Downloader;
+import newsreader.ParallelDownloader;
+import newsreader.SequentialDownloader;
 
 import static newsanalyzer.ctrl.Controller.APIKEY;
+import static newsanalyzer.ctrl.Controller.urlList;
 
 public class UserInterface 
 {
 	private Controller ctrl = new Controller();
+	private SequentialDownloader seqDown = new SequentialDownloader();
+	private ParallelDownloader paraDown = new ParallelDownloader();
 
 	public void getDataFromCtrl1(){
 		System.out.println("Choice latest news NFL\"");
@@ -109,6 +116,26 @@ public class UserInterface
 		ctrl.process(newsApi);
 	}
 
+	public void getDownloadLastSearchSeq(){
+		System.out.println("Download last search Sequential");
+
+		long startTime = System.currentTimeMillis();
+		seqDown.process(urlList);
+		long endTime = System.currentTimeMillis();
+		long timeElapsed = (endTime - startTime)/1000;
+		System.out.println("Time taken: "+timeElapsed+"s");
+	}
+
+	public void getDownloadLastSearchPara(){
+		System.out.println("Download last search Sequential");
+
+		long startTime = System.currentTimeMillis();
+		paraDown.process(urlList);
+		long endTime = System.currentTimeMillis();
+		long timeElapsed = (endTime - startTime);
+		System.out.println("Time taken: "+timeElapsed+"ms");
+	}
+
 
 	public void start() {
 		Menu<Runnable> menu = new Menu<>("User Interface");
@@ -117,6 +144,8 @@ public class UserInterface
 		menu.insert("b", "Choice latest NBA news", this::getDataFromCtrl2);
 		menu.insert("c", "Choice latest news usa", this::getDataFromCtrl3);
 		menu.insert("d", "Choice User Imput:",this::getDataForCustomInput);
+		menu.insert("e", "Download last search Sequential", this::getDownloadLastSearchSeq);
+		menu.insert("f", "Download last search Parallel", this::getDownloadLastSearchPara);
 		menu.insert("q", "Quit", null);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {

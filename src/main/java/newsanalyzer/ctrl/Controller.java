@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class Controller {
 
 	public static final String APIKEY = "76c866eebc25452d9f2ec2bac97a08e5";
+	public static List urlList;
 
 	public long getAmountOfArticles(List<Article> data){
 		return data.stream().count();
@@ -43,6 +44,10 @@ public class Controller {
 		return data_temp;
 	}
 
+	public List<String> getURL(List<Article> data){
+		return data.stream().map(a-> a.getUrl()).collect(Collectors.toList());
+	}
+
 	public void process(NewsApi getSearchedNews) {
 		System.out.println("Start process");
 		List<Article> articles = null;
@@ -58,9 +63,12 @@ public class Controller {
 			System.out.println("Amount of Articles: "+getAmountOfArticles(articles));
 			System.out.println("Provider with most Articles: "+getProviderWithMostArticles(articles));
 			System.out.println("Author with shortest Name: "+getAuthorWithShortestName(articles));
-			System.out.println("Article with longest Title: "+ getArticlesWithLongestTitle(articles));
-			System.out.println("Article sorted Alphabetically: "+getArticlesSorted(articles));
+			//System.out.println("Article with longest Title: "+ getArticlesWithLongestTitle(articles));
+			//System.out.println("Article sorted Alphabetically: "+getArticlesSorted(articles));
+			System.out.println("Get URL from Articles: "+getURL(articles));
+			urlList = getURL(articles);
 			System.out.println();
+
 		} catch (NewsApiException e) {
 			System.out.println(e.getMessage());
 		}
